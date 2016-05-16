@@ -1,6 +1,6 @@
 package info.rmapproject.cos.share.client.service;
 
-import info.rmapproject.cos.share.client.model.RecordList;
+import info.rmapproject.cos.share.client.model.ResultsPage;
 
 import java.util.Map;
 
@@ -12,11 +12,11 @@ import retrofit2.http.QueryMap;
  * SHARE Service interface
  * @author khanson
  */
-public interface ShareService {
+public interface ShareRetrofitService {
 
     @GET("search/")
-    Call<RecordList> recordList();
+    Call<ResultsPage> recordList();
 
     @GET("search/")
-    Call<RecordList> recordList(@QueryMap Map<String, String> params);
+    Call<ResultsPage> recordList(@QueryMap Map<String, String> params);
 }

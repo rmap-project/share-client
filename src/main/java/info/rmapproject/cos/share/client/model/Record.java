@@ -35,6 +35,7 @@ public class Record {
 	private Agent publisher;
 	private List<URI> languages;
 	private List<Sponsorship> sponsorships;
+	private ShareProperties shareProperties;
 	
 	@JsonProperty("otherProperties")
 	private List<OtherProperty> otherProperties;
@@ -47,7 +48,6 @@ public class Record {
 	* 
 	* private Date versionDateTime;
 	* 
-	* private List<SHAREShareProperty> shareProperties
 	* private List<SHARETag> tags
 	* private Date providerUpdatedDateTime
 	* private Date freeToReadStartDate
@@ -164,6 +164,16 @@ public class Record {
 
 	public void setOtherProperties(List<OtherProperty> otherProperties) {
 		this.otherProperties = otherProperties;
+	}
+
+
+	public ShareProperties getShareProperties() {
+		return shareProperties;
+	}
+
+
+	public void setShareProperties(ShareProperties shareProperties) {
+		this.shareProperties = shareProperties;
 	}
 	
 }

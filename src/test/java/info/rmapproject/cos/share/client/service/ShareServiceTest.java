@@ -1,7 +1,7 @@
 package info.rmapproject.cos.share.client.service;
 
 import static org.junit.Assert.assertNotNull;
-import info.rmapproject.cos.share.client.model.RecordList;
+import info.rmapproject.cos.share.client.model.ResultsPage;
 
 import java.util.HashMap;
 
@@ -20,23 +20,23 @@ public class ShareServiceTest {
     @Test
     public void testGetShareRecord() throws Exception {
         
-    	ObjectMapper mapper = new ObjectMapper();;
+    	ObjectMapper mapper = new ObjectMapper();
         
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://osf.io/api/v1/share/")
                 .addConverterFactory(JacksonConverterFactory.create(mapper))
                 .build();
         
-        ShareService sharesvc = retrofit.create(ShareService.class);
+        ShareRetrofitService sharesvc = retrofit.create(ShareRetrofitService.class);
 
         HashMap<String, String> params = new HashMap<>();
         params.put("q", "heart");
-        Call<RecordList> listCall = sharesvc.recordList(params);
+        Call<ResultsPage> listCall = sharesvc.recordList(params);
         assertNotNull(listCall);
-        Response<RecordList> res = listCall.execute();
+        Response<ResultsPage> res = listCall.execute();
         assertNotNull(res);
         
-        RecordList shareRecords = null;
+        ResultsPage shareRecords = null;
         if (!res.isSuccessful()) {
             assertNotNull(res.errorBody());
             System.err.println(res.errorBody().string());

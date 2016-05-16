@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -18,29 +17,15 @@ public class OtherPropertyValue {
 	//Other properties each have their own rules, so capturing them here.
 	private URI doi;
 	
-	@JsonProperty("format")
-	private Object formats;
-	
-	private List<String> identifier;
-	
-	@JsonProperty("isbn")
-	private Object isbn;
-
-	@JsonProperty("electronicIsbn")
-	private String eisbn;
-	
-	@JsonProperty("issn")
-	private Object issn;
-		
-	private String eissn;
-	
-	private List<URI> links;
-	
-	@JsonProperty("relation")
-	private List<URI> relations;
-	
-	@JsonProperty("type")
-	private Object types;
+	private List<String> formats;	
+	private List<String> identifiers;
+	private List<String> eisbns;
+	private List<String> eissns;
+	private List<String> issns;
+	private List<String> isbns;
+	private List<String> links;
+	private List<String> relations;
+	private List<String> types;	
 	
 	public URI getDoi() {
 		return doi;
@@ -58,126 +43,194 @@ public class OtherPropertyValue {
 			this.doi = null;
 		}
 	}
-	public Object getFormats() {
+	
+	public List<String> getFormats() {
 		return formats;
 	}
-	public void setFormats(Object formats) {
-		this.formats = formats;
-		if (this.formats!=null){this.opType=OtherPropertyType.FORMATS;}
-	}
-	public List<String> getIdentifier() {
-		return identifier;
-	}
-	public void setIdentifier(List<String> identifier) {
-		this.identifier = identifier;
-		if (this.identifier!=null){this.opType=OtherPropertyType.IDENTIFIERS;}
-	}
-	
-	public Object getIsbn() {
-		return isbn;
+	@JsonSetter("format")
+	public void setFormat(Object format) {
+		this.setFormats(format);
 	}	
-	
-	//** these all set the same isbn value... there is only one isbn getter.
-	public void setIsbn(String isbn) {
-		isbn = Utils.setEmptyToNull(isbn);
-		this.isbn = isbn;
-		if (this.isbn!=null){this.opType=OtherPropertyType.ISBN;}
+	@JsonSetter("formats")
+	public void setFormats(Object formats) {
+		if (this.formats==null){
+			this.formats = new ArrayList<String>();
+		}
+		this.formats.addAll(this.buildList(formats));
+		if (this.formats.size()>0){this.opType=OtherPropertyType.FORMATS;}
 	}
-
+	
+	
+		
+	public List<String> getIdentifiers() {
+		return this.identifiers;
+	}
+	public void setIdentifier(Object identifier) {
+		if (this.identifiers==null){
+			this.identifiers = new ArrayList<String>();
+		}
+		this.identifiers.addAll(this.buildList(identifier));
+		if (this.identifiers.size()>0){this.opType=OtherPropertyType.IDENTIFIERS;}
+	}
+	
+	
+	public List<String> getIsbns() {
+		return isbns;
+	}		
+	//** these all set the same isbn value... there is only one isbn getter.
+	@JsonSetter("isbn")
+	public void setIsbn(Object isbn) {
+		if (this.isbns==null){
+			this.isbns = new ArrayList<String>();
+		}
+		this.isbns.addAll(this.buildList(isbn));
+		if (this.isbns.size()>0){this.opType=OtherPropertyType.ISBN;}
+	}
 	@JsonSetter("ISBN")
 	public void setIsbnAlt(Object isbnAlt) {
-		//isbnAlt = Utils.setEmptyToNull(isbnAlt);
-		this.isbn = isbnAlt;
-		if (this.isbn!=null){this.opType=OtherPropertyType.ISBN;}
+		this.setIsbn(isbnAlt);
 	}
-	
 	@JsonSetter("printIsbn")
-	public void setPrintIsbn(String printIsbn) {
-		printIsbn = Utils.setEmptyToNull(printIsbn);
-		this.isbn = printIsbn;
-		if (this.isbn!=null){this.opType=OtherPropertyType.ISBN;}
+	public void setPrintIsbn(Object printIsbn) {
+		this.setIsbn(printIsbn);
 	}
 	
-	public String getEisbn() {
-		return this.eisbn;
+	
+	
+	public List<String> getEisbn() {
+		return this.eisbns;
 	}
-	public void setElectronicIsbn(String eisbn) {
-		eisbn = Utils.setEmptyToNull(eisbn);
-		this.eisbn = eisbn;
-		if (this.eisbn!=null){this.opType=OtherPropertyType.EISBN;}
+	//These both set the same eisbn value - only one eisbn getter
+	@JsonSetter("eisbn")
+	public void setEisbns(Object eisbn) {
+		if (this.eisbns==null){
+			this.eisbns = new ArrayList<String>();
+		}
+		this.eisbns.addAll(this.buildList(eisbn));
+		if (this.eisbns.size()>0){this.opType=OtherPropertyType.EISBN;}
+	}
+	@JsonSetter("electronicIsbn")
+	public void setElectronicIsbn(Object eisbns) {
+		this.setEisbns(eisbns);
 	}
 	
-	public Object getIssn() {
-		return issn;
+		
+	public List<String> getIssns() {
+		return issns;
 	}
 	//These both set the same issn value - only one issn getter
+	@JsonSetter("issn")
 	public void setIssn(Object issn) {
-		//issn = Utils.setEmptyToNull(issn);
-		this.issn = issn;
-		if (this.issn!=null){this.opType=OtherPropertyType.ISSN;}
+		if (this.issns==null){
+			this.issns = new ArrayList<String>();
+		}
+		this.issns.addAll(this.buildList(issn));
+		if (this.issns.size()>0){this.opType=OtherPropertyType.ISSN;}
 	}
-
 	@JsonSetter("ISSN")
 	public void setIssnAlt(Object issnAlt) {
-		//issnAlt = Utils.setEmptyToNull(issnAlt);
-		this.issn = issnAlt;
-		if (this.issn!=null){this.opType=OtherPropertyType.ISSN;}
-
+		this.setIssn(issnAlt);
 	}
 	
-	public String getEissn() {
-		return eissn;
-	}
-	public void setEissn(String eissn) {
-		eissn = Utils.setEmptyToNull(eissn);
-		this.eissn = eissn;
-		if (this.eissn!=null){this.opType=OtherPropertyType.EISSN;}
-
-	}
 	
-	public List<URI> getLinks() {
+	
+	public List<String> getEissns() {
+		return this.eissns;
+	}
+	@JsonSetter("eissn")
+	public void setEissns(Object eissn) {
+		if (this.eissns==null){
+			this.eissns = new ArrayList<String>();
+		}
+		this.eissns.addAll(this.buildList(eissn));
+		if (this.eissns.size()>0){this.opType=OtherPropertyType.EISSN;}
+	}
+		
+	
+	
+	public List<String> getLinks() {
 		return links;
 	}
-
-	public void setLinks(List<String> links) {
-		this.links = Utils.convertStringListToUris(links);
-		if (this.links!=null){this.opType=OtherPropertyType.LINKS;}
+	@JsonSetter("links")
+	public void setLinks(Object links) {
+		this.setLink(links);
 	}	
 	@JsonSetter("link")
-	public void setLink(String link) {
-		URI uriLink = Utils.convertStringToUri(link);
-		this.addLink(uriLink);
-		if (this.links!=null){this.opType=OtherPropertyType.LINKS;}
-	}
-	public void addLink(URI link) {
+	public void setLink(Object link) {
 		if (this.links==null){
-			this.links = new ArrayList<URI>();
+			this.links = new ArrayList<String>();
 		}
-		if (link!=null){
-			this.links.add(link);
-		}
-	}	
+		this.links.addAll(this.buildList(link));
+		if (this.links.size()>0){this.opType=OtherPropertyType.LINKS;}
+	}
 	
-	public List<URI> getRelations() {
+	
+	
+	public List<String> getRelations() {
 		return relations;
 	}
-	public void setRelations(List<String> relations) {
-		this.relations = Utils.convertStringListToUris(relations);
-		if (this.relations!=null){this.opType=OtherPropertyType.RELATIONS;}
+	@JsonSetter("relation")
+	public void setRelation(Object relation){
+		setRelations(relation);
 	}
+	@JsonSetter("relations")
+	public void setRelations(Object relations) {
+		if (this.relations==null){
+			this.relations = new ArrayList<String>();
+		}
+		this.relations.addAll(this.buildList(relations));
+		if (this.relations.size()>0){this.opType=OtherPropertyType.RELATIONS;}
+	}
+		
 	
-	public Object getTypes() {
+	public List<String> getTypes() {
 		return types;
 	}
-	public void setType(Object types) {
-		this.types = types;
-		if (this.types!=null){this.opType=OtherPropertyType.TYPES;}
+	@JsonSetter("type")
+	public void setType(Object type) {
+		this.setTypes(type);
+	}
+	@JsonSetter("types")
+	public void setTypes(Object types) {
+	if (this.types==null){
+		this.types = new ArrayList<String>();
+	}
+	this.types.addAll(this.buildList(types));
+	if (this.types.size()>0){this.opType=OtherPropertyType.TYPES;}
 	}
 	
+		
 	public OtherPropertyType getOtherPropertyType(){
 		return this.opType;
+	}	
+
+	/**
+	 * Builds string list from Object containing either a String or a List<String>. 
+	 * Removes empty/null and returns as new List<String>.
+	 * @param val
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private List<String> buildList(Object val){
+		List<String> valueList = new ArrayList<String>();
+		if (val!=null){
+			if (val instanceof String){
+				String sVal = (String) val;
+				sVal = Utils.setEmptyToNull(sVal);
+				if (sVal!=null){
+					valueList.add(sVal);
+				}
+			} else {
+				List<String> sVals = (List<String>) val;
+				for (String sVal : sVals){
+					sVal = Utils.setEmptyToNull(sVal);
+					if (sVal!=null){
+						valueList.add(sVal);		
+					}
+				}
+			}
+		}
+		return valueList;		
 	}
-	
-	
 	
 }
