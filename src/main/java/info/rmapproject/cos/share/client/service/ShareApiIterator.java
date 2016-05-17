@@ -30,7 +30,7 @@ public class ShareApiIterator {
 	
 	private static final String SIZE_PARAM = "size";
 	private static final String FROM_PARAM = "from";
-	private static final Integer FROM_DEFAULT = 1;
+	private static final Integer FROM_DEFAULT = 0;
 	private static final Integer SIZE_DEFAULT = 30;
 	
     /**Base URL for API calls**/
@@ -46,7 +46,7 @@ public class ShareApiIterator {
 	private List<Record> records = null;
 	
 	/**position of last record retrieve in current List<Record> records*/
-	private Integer position = 0;
+	private Integer position = -1;
 	
 	/** size parameter used to build list **/
 	private Integer size = SIZE_DEFAULT;	
@@ -93,7 +93,7 @@ public class ShareApiIterator {
      * @return
      * @throws Exception
      */
-    public Record next() throws Exception {
+    public Record next() {
     	if (records==null){
     		throw new RuntimeException("Records failed to load on initiation");
     	}
@@ -103,8 +103,8 @@ public class ShareApiIterator {
     		return null;  		//no more records to retrieve.
     	}
     	
-    	position=position+1;
-		
+        position=position+1;    		
+    	
     	if (position == size){ 
     		// we have reached the last record in the current list, get more
     		position=0;
@@ -160,8 +160,19 @@ public class ShareApiIterator {
     	return totalRecordCount;
     }
     
+    /**
+     * Will return current Record list (or null if there isn't one) - lists are 30 records long by default 
+	 * unless a different size has been defined in the params
+     * Using next() will automatically paginate, but this procedure allows you to disconnect 
+     * the record list from the Iterator.
+     * @return
+     */
+   public List<Record> getCurrentRecordList(){
+	   return records;
+   }
+    
     public boolean hasNext(){
-    	if (totalRecordCount>(from+position)){
+    	if (totalRecordCount>(from+position+1)){
     		return true;
     	} else {
     		return false;
