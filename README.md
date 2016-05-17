@@ -3,7 +3,7 @@ This client retrieves records from the SHARE API based on search parameters prov
 
 The ShareApiIterator allows you to build a set of SHARE results and  either retrieve a list of records using getCurrentRecordList(), or iterate over all matching results using next().  The next() function will automatically paginate through the API results.
 
-The results are returned as List<Record> where Record contains the properties of a single SHARE record as a Java POJO.
+The results are returned as List<Record> where Record contains the properties of a single SHARE record as Java POJOs.
 
 <em>Note: this was developed to harvest specific components of the SHARE data, so the Record model is incomplete. It does not, for example, include License fields, or all possible "otherProperties" among others.</em>
 
@@ -21,6 +21,7 @@ share-client/target/share-client-{$version}.jar
 ```
 HashMap<String, String> params = new HashMap<>();
 params.put("q", "heart");
+params.put("size", "50"); //if this is not included, next() will iterate through all matching results
 ShareApiIterator iterator = new ShareApiIterator(params);
 do {
   Record rec = iterator.next();
