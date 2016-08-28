@@ -1,3 +1,22 @@
+/*******************************************************************************
+ * Copyright 2016 Johns Hopkins University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * This software was produced as part of the RMap Project (http://rmap-project.info),
+ * The RMap Project was funded by the Alfred P. Sloan Foundation and is a 
+ * collaboration between Data Conservancy, Portico, and IEEE.
+ *******************************************************************************/
 package info.rmapproject.cos.share.client.service;
 
 import info.rmapproject.cos.share.client.model.Record;
@@ -26,32 +45,40 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ShareApiIterator {
 
+    /** The log. */
     protected static final Logger log = LoggerFactory.getLogger(ShareApiIterator.class);
 	
+	/** The API term for the size parameter. */
 	private static final String SIZE_PARAM = "size";
+
+	/** The API term for the from parameter. */
 	private static final String FROM_PARAM = "from";
+	
+	/** The default from param value. */
 	private static final Integer FROM_DEFAULT = 0;
+
+	/** The default size param value. */
 	private static final Integer SIZE_DEFAULT = 30;
 	
-    /**Base URL for API calls**/
+    /** Base URL for API calls. */
     private static final String BASE_URL = "https://osf.io/api/v1/share/";
     
-    /** SHARE retrofit service**/
+    /**  SHARE retrofit service*. */
 	private ShareRetrofitService sharesvc = null;
 	
-	/** search params**/
+	/**  search params*. */
 	private Map<String, String> params = null;
 
-	/**current list of records loaded corresponds to single page of results*/
+	/** current list of records loaded corresponds to single page of results. */
 	private List<Record> records = null;
 	
-	/**position of last record retrieve in current List<Record> records*/
+	/** position of last record retrieve in current List<Record> records. */
 	private Integer position = -1;
 	
-	/** size parameter used to build list **/
+	/**  size parameter used to build list *. */
 	private Integer size = SIZE_DEFAULT;	
 	
-	/** size parameter used to build list **/
+	/**  size parameter used to build list *. */
 	private Integer from = FROM_DEFAULT;
 	
 	/**
@@ -60,10 +87,11 @@ public class ShareApiIterator {
 	 */
 	private Integer totalRecordCount = 0;
     
-	/** 
-	 * Initiates Retrofit service, sets defaults
-	 * @param params
-	 * @throws Exception
+	/**
+	 * Initiates Retrofit service, sets defaults.
+	 *
+	 * @param params the params
+	 * @throws Exception the exception
 	 */
     public ShareApiIterator(Map<String,String> params) throws Exception{
 		//create client
@@ -89,9 +117,9 @@ public class ShareApiIterator {
     
     /**
      * Retrieves next record from the SHARE API, retrieves more records as needed
-     * returns null when no more records founds
-     * @return
-     * @throws Exception
+     * returns null when no more records founds.
+     *
+     * @return the record
      */
     public Record next() {
     	if (records==null){
@@ -119,8 +147,6 @@ public class ShareApiIterator {
     
     /**
      * Get new batch of Records from SHARE API - used to initiate list or get new page of results to refill list.
-     * @return
-     * @throws Exception
      */
     private void loadNextBatch() {
 		if (records!=null) { //it's not the first batch request
@@ -156,21 +182,32 @@ public class ShareApiIterator {
 		}
     }
     
+    /**
+     * Gets the total record count.
+     *
+     * @return the total record count
+     */
     public Integer getTotalRecordCount(){
     	return totalRecordCount;
     }
     
     /**
      * Will return current Record list (or null if there isn't one) - lists are 30 records long by default 
-	 * unless a different size has been defined in the params
+     * unless a different size has been defined in the params
      * Using next() will automatically paginate, but this procedure allows you to disconnect 
      * the record list from the Iterator.
-     * @return
+     *
+     * @return the current record list
      */
    public List<Record> getCurrentRecordList(){
 	   return records;
    }
     
+    /**
+     * Checks for next.
+     *
+     * @return true, if successful
+     */
     public boolean hasNext(){
     	if (totalRecordCount>(from+position+1)){
     		return true;
