@@ -1,3 +1,5 @@
+Deprecated: does not support latest SHARE API
+
 # share-client
 This client retrieves records from the SHARE API based on search parameters provided.
 
